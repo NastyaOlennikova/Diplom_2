@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class LoginUserTest {
+public class LoginUserTests {
 
     @Before
     public void setUp() {

@@ -3,16 +3,13 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.example.Credentials;
 import org.example.NewUserData;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class RegisterUserTest {
+public class RegisterUserTests {
 
     @Before
     public void setUp() {
