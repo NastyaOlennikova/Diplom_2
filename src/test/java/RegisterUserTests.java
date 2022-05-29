@@ -25,7 +25,6 @@ public class RegisterUserTests {
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .and()
                         .body(newUser.generateNewUserCredentials())
                         .when()
                         .post("/api/auth/register");
@@ -41,7 +40,6 @@ public class RegisterUserTests {
             Response response =
                     given()
                             .header("Content-type", "application/json")
-                            .and()
                             .body(credentials)
                             .when()
                             .post("/api/auth/register");
@@ -51,7 +49,6 @@ public class RegisterUserTests {
 
                     given()
                         .header("Content-type", "application/json")
-                        .and()
                         .body(credentials)
                         .when()
                         .post("/api/auth/register")
@@ -65,7 +62,6 @@ public class RegisterUserTests {
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .and()
                         .body(credentials)
                         .when()
                         .post("/api/auth/register");

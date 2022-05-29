@@ -2,9 +2,12 @@ package org.example;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 
 public class NewUserData {
@@ -43,6 +46,23 @@ public class NewUserData {
         return emailPass;
 
     }
+    public List<String> registerUserAndReturnTokens() {
+        NewUserData newUser = new NewUserData();
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .body(newUser.generateNewUserCredentials())
+                        .when()
+                        .post("/api/auth/register");
+        response.then().assertThat().statusCode(200).and().body("success", equalTo(true));
+        String refreshToken = response.path("refreshToken");
+        String accessToken = response.path("accessToken");
+        List<String> tokens  = new ArrayList<>();
+        tokens.add(refreshToken);
+        tokens.add(accessToken.substring(7));
+        return tokens;
+    }
+
     public void deleteUser(String refreshToken, String accessToken) {
         given()
                 .header("Content-type", "application/json")
