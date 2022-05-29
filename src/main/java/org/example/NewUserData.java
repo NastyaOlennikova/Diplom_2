@@ -1,8 +1,8 @@
 package org.example;
+
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class NewUserData {
         String accessToken = response.path("accessToken");
         List<String> tokens  = new ArrayList<>();
         tokens.add(refreshToken);
-        tokens.add(accessToken.substring(7));
+        tokens.add(accessToken);
         return tokens;
     }
 

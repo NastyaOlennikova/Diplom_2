@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -20,6 +21,7 @@ public class RegisterUserTests {
     private String accessToken;
 
     @Test
+    @DisplayName("Register new user")
     public void createUniqueUser() {
         NewUserData newUser = new NewUserData();
         Response response =
@@ -34,6 +36,7 @@ public class RegisterUserTests {
     }
 
     @Test
+    @DisplayName("Attempt to create existed user")
     public void createExistedUser() {
         NewUserData newUser = new NewUserData();
         Credentials credentials = newUser.generateNewUserCredentials();
@@ -57,6 +60,7 @@ public class RegisterUserTests {
     }
 
     @Test
+    @DisplayName("Attempt to create a user without filling all required fields")
     public void createUserRequiredFields() {
         Credentials credentials = new Credentials(RandomStringUtils.randomAlphabetic(5) + "@" + RandomStringUtils.randomAlphabetic(5) + ".ru", RandomStringUtils.randomAlphabetic(10));
         Response response =

@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,6 +22,7 @@ public class LoginUserTests {
     private String accessToken;
 
     @Test
+    @DisplayName("Successful user login")
     public void loginUserValidCredentials() {
         NewUserData newUser = new NewUserData();
         ArrayList<String> emailPass = newUser.registerNewUserAndReturnCredentials();
@@ -39,6 +41,7 @@ public class LoginUserTests {
 
 
     @Test
+    @DisplayName("Login with invalid password")
     public void loginUserInvalidPassword() {
         NewUserData newUser = new NewUserData();
         ArrayList<String> emailPass = newUser.registerNewUserAndReturnCredentials();
@@ -53,6 +56,7 @@ public class LoginUserTests {
     }
 
     @Test
+    @DisplayName("Login with invalid email")
     public void loginUserInvalidEmail() {
         NewUserData newUser = new NewUserData();
         ArrayList<String> emailPass = newUser.registerNewUserAndReturnCredentials();

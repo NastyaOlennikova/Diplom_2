@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,13 +22,16 @@ public class CreateOrderTests {
     }
 
     @Test
+    @DisplayName("Create order for authorised user")
     public void createOrderAuth() {
         NewUserData newUser = new NewUserData();
-        String token = newUser.registerUserAndReturnTokens().get(1);
+        List<String> tokens = newUser.registerUserAndReturnTokens();
+        String refreshToken = tokens.get(0);
+        String accessToken = tokens.get(1);
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2(token)
+                        .auth().oauth2(accessToken)
                         .when()
                         .get("/api/ingredients");
         response.then().assertThat().statusCode(200).and().body("success", equalTo(true));
@@ -43,23 +47,21 @@ public class CreateOrderTests {
         Response response_order =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2(token)
+                        .auth().oauth2(accessToken.substring(7))
                         .and()
                         .body(ingredients)
                         .when()
                         .post("/api/orders");
         response_order.then().assertThat().statusCode(200).and().body("success", equalTo(true)).and().body("order.price", notNullValue());
-
+        newUser.deleteUser(refreshToken, accessToken);
     }
 
     @Test
+    @DisplayName("Create order for unauthorised user")
     public void createOrderNoAuth() {
-        NewUserData newUser = new NewUserData();
-        String token = newUser.registerUserAndReturnTokens().get(1);
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2(token)
                         .when()
                         .get("/api/ingredients");
         response.then().assertThat().statusCode(200).and().body("success", equalTo(true));
@@ -82,13 +84,16 @@ public class CreateOrderTests {
     }
 
     @Test
+    @DisplayName("Create order without ingredients")
     public void createOrderNoIngredients() {
         NewUserData newUser = new NewUserData();
-        String token = newUser.registerUserAndReturnTokens().get(1);
+        List<String> tokens = newUser.registerUserAndReturnTokens();
+        String refreshToken = tokens.get(0);
+        String accessToken = tokens.get(1);
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2(token)
+                        .auth().oauth2(accessToken.substring(7))
                         .when()
                         .get("/api/ingredients");
         response.then().assertThat().statusCode(200).and().body("success", equalTo(true));
@@ -98,22 +103,26 @@ public class CreateOrderTests {
         Response response_order =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2(token)
+                        .auth().oauth2(accessToken.substring(7))
                         .and()
                         .body(ingredients)
                         .when()
                         .post("/api/orders");
         response_order.then().assertThat().statusCode(400).and().body("success", equalTo(false)).and().body("message", equalTo("Ingredient ids must be provided"));
+        newUser.deleteUser(refreshToken, accessToken);
     }
 
     @Test
-    public void createOrderWrongIngredientId() {
+    @DisplayName("Create order with wrong ingredient hash by authorised user")
+    public void createOrderAuthWrongIngredientId() {
         NewUserData newUser = new NewUserData();
-        String token = newUser.registerUserAndReturnTokens().get(1);
+        List<String> tokens = newUser.registerUserAndReturnTokens();
+        String refreshToken = tokens.get(0);
+        String accessToken = tokens.get(1);
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2(token)
+                        .auth().oauth2(accessToken.substring(7))
                         .when()
                         .get("/api/ingredients");
         response.then().assertThat().statusCode(200).and().body("success", equalTo(true));
@@ -129,7 +138,36 @@ public class CreateOrderTests {
         Response response_order =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2(token)
+                        .auth().oauth2(accessToken.substring(7))
+                        .and()
+                        .body(ingredients)
+                        .when()
+                        .post("/api/orders");
+        response_order.then().assertThat().statusCode(500);
+        newUser.deleteUser(refreshToken, accessToken);
+    }
+
+    @Test
+    @DisplayName("Create order with wrong ingredient hash by unauthorised user")
+    public void createOrderNoAuthWrongIngredientId() {
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .when()
+                        .get("/api/ingredients");
+        response.then().assertThat().statusCode(200).and().body("success", equalTo(true));
+
+        List<String> allIngredientsIds = response.jsonPath().get("data._id");
+        ArrayList<String>orderIngredients = new ArrayList<>();
+        final Random random = new Random();
+        orderIngredients.add(RandomStringUtils.randomAlphabetic(24));
+        orderIngredients.add(allIngredientsIds.get(random.nextInt(allIngredientsIds.size())));
+        orderIngredients.add(allIngredientsIds.get(random.nextInt(allIngredientsIds.size())));
+        Ingredients ingredients = new Ingredients(orderIngredients);
+
+        Response response_order =
+                given()
+                        .header("Content-type", "application/json")
                         .and()
                         .body(ingredients)
                         .when()
