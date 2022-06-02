@@ -56,7 +56,7 @@ public class CreateOrderTests {
         newUser.deleteUser(refreshToken, accessToken);
     }
 
-    @Test
+    @Test //тест падает, так как приходит 200-ый код для неавторизованного пользователя, неправильное поведение
     @DisplayName("Create order for unauthorised user")
     public void createOrderNoAuth() {
         Response response =
@@ -80,7 +80,7 @@ public class CreateOrderTests {
                         .body(ingredients)
                         .when()
                         .post("/api/orders");
-        response_order.then().assertThat().statusCode(200).and().body("success", equalTo(true)).and().body("order.status", nullValue());
+        response_order.then().assertThat().statusCode(401).and().body("success", equalTo(false)).and().body("message", equalTo("You should be authorised"));
     }
 
     @Test
