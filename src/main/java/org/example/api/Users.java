@@ -8,10 +8,9 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 
 public class Users {
-
     public Response loginUser(Credentials credentials) {
 
-        Response response =
+         Response response =
                 given()
                         .header("Content-type", "application/json")
                         .body(credentials)
@@ -42,7 +41,7 @@ public class Users {
         return response;
     }
 
-    public Response updateUserInfoNoAuth(List<String> tokens, Credentials credentials) {
+    public Response updateUserInfoNoAuth(Credentials credentials) {
         Response response =
                 given()
                         .header("Content-type", "application/json")

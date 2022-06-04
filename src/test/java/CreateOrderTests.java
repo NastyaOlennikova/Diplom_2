@@ -10,13 +10,11 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class CreateOrderTests {
-    final Random random = new Random();
 
     @Before
     public void setUp() {
@@ -113,7 +111,4 @@ public class CreateOrderTests {
         Response responseOrder = order.makeOrderNoAuth(ingredients);
         responseOrder.then().assertThat().statusCode(500);
     }
-
-
-
 }

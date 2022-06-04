@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.request;
 
 public class Orders {
     public Response getIngredientDataAuth(String accessToken) {

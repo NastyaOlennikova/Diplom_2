@@ -37,7 +37,7 @@ public class UpdateUserDataTests {
     @DisplayName("Update user's data, unauthorized")
     public void updateUserDataNoAuth() {
         Users users = new Users();
-        Response response = users.updateUserInfoNoAuth(tokens, credentials);
+        Response response = users.updateUserInfoNoAuth(credentials);
         response.then().assertThat().statusCode(401).and().body("message", equalTo("You should be authorised"));
 
     }

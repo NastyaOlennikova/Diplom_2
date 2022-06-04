@@ -14,9 +14,7 @@ public class RegisterUserTests {
 
     @Before
     public void setUp() {
-
         RestAssured.baseURI = "https://stellarburgers.nomoreparties.site/";
-
     }
 
     private String refreshToken;
