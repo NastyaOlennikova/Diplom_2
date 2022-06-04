@@ -74,13 +74,13 @@ public class CreateOrderTests {
         orderIngredients.add(allIngredientsIds.get(random.nextInt(allIngredientsIds.size())));
         Ingredients ingredients = new Ingredients(orderIngredients);
 
-        Response response_order =
+        Response responseOrder =
                 given()
                         .header("Content-type", "application/json")
                         .body(ingredients)
                         .when()
                         .post("/api/orders");
-        response_order.then().assertThat().statusCode(401).and().body("success", equalTo(false)).and().body("message", equalTo("You should be authorised"));
+        responseOrder.then().assertThat().statusCode(401).and().body("success", equalTo(false)).and().body("message", equalTo("You should be authorised"));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class CreateOrderTests {
 
         Ingredients ingredients = new Ingredients(new ArrayList<>());
 
-        Response response_order =
+        Response responseOrder =
                 given()
                         .header("Content-type", "application/json")
                         .auth().oauth2(accessToken.substring(7))
@@ -108,7 +108,7 @@ public class CreateOrderTests {
                         .body(ingredients)
                         .when()
                         .post("/api/orders");
-        response_order.then().assertThat().statusCode(400).and().body("success", equalTo(false)).and().body("message", equalTo("Ingredient ids must be provided"));
+        responseOrder.then().assertThat().statusCode(400).and().body("success", equalTo(false)).and().body("message", equalTo("Ingredient ids must be provided"));
         newUser.deleteUser(refreshToken, accessToken);
     }
 
@@ -135,7 +135,7 @@ public class CreateOrderTests {
         orderIngredients.add(allIngredientsIds.get(random.nextInt(allIngredientsIds.size())));
         Ingredients ingredients = new Ingredients(orderIngredients);
 
-        Response response_order =
+        Response responseOrder =
                 given()
                         .header("Content-type", "application/json")
                         .auth().oauth2(accessToken.substring(7))
@@ -143,7 +143,7 @@ public class CreateOrderTests {
                         .body(ingredients)
                         .when()
                         .post("/api/orders");
-        response_order.then().assertThat().statusCode(500);
+        responseOrder.then().assertThat().statusCode(500);
         newUser.deleteUser(refreshToken, accessToken);
     }
 
@@ -165,14 +165,14 @@ public class CreateOrderTests {
         orderIngredients.add(allIngredientsIds.get(random.nextInt(allIngredientsIds.size())));
         Ingredients ingredients = new Ingredients(orderIngredients);
 
-        Response response_order =
+        Response responseOrder =
                 given()
                         .header("Content-type", "application/json")
                         .and()
                         .body(ingredients)
                         .when()
                         .post("/api/orders");
-        response_order.then().assertThat().statusCode(500);
+        responseOrder.then().assertThat().statusCode(500);
     }
 
 
