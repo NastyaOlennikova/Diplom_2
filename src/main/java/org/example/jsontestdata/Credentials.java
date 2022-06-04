@@ -1,4 +1,4 @@
-package org.example;
+package org.example.jsontestdata;
 
 public class Credentials {
     private String email;

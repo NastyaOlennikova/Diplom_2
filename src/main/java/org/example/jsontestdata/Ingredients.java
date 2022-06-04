@@ -1,4 +1,4 @@
-package org.example;
+package org.example.jsontestdata;
 
 import java.util.ArrayList;
 

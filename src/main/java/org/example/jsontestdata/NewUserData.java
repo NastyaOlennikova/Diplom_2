@@ -1,4 +1,4 @@
-package org.example;
+package org.example.jsontestdata;
 
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -11,7 +11,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 
 public class NewUserData {
-    String userEmail = RandomStringUtils.randomAlphabetic(5) + "@" + RandomStringUtils.randomAlphabetic(5) + ".ru";;
+    String userEmail = RandomStringUtils.randomAlphabetic(5) + "@" + RandomStringUtils.randomAlphabetic(5) + ".ru";
     String userPassword = RandomStringUtils.randomAlphabetic(10);
     String userName = RandomStringUtils.randomAlphabetic(10);
 
@@ -72,7 +72,7 @@ public class NewUserData {
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2(accessToken.substring(7, accessToken.length()))
+                        .auth().oauth2(accessToken.substring(7))
                         .delete("/api/auth/user");
         response.then().assertThat().statusCode(202);
     }
